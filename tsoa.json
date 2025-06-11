@@ -1,0 +1,25 @@
+{
+    "entryFile": "tsoa-entry.ts",
+    "controllerPathGlobs": [
+        "app/api/**/*Controller.ts"
+    ],
+    "noImplicitAdditionalProperties": "throw-on-extras",
+    "spec": {
+        "outputDirectory": "public",
+        "specVersion": 3,
+        "securityDefinitions": {
+            "jwt": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        },
+        "security": [{ "jwt": [] }],
+        "basePath": "/api",
+        "outputFilePath": "swagger.json"
+    },
+    "routes": {
+        "routesDir": "tsoa-routes"
+    },
+    "additionalProperties": "ignore"
+}

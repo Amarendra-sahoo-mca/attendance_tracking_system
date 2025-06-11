@@ -1,0 +1,802 @@
+{
+	"openapi": "3.0.0",
+	"components": {
+		"examples": {},
+		"headers": {},
+		"parameters": {},
+		"requestBodies": {},
+		"responses": {},
+		"schemas": {
+			"HolidaysDTO": {
+				"properties": {
+					"name": {
+						"type": "string",
+						"example": "good friday"
+					},
+					"date": {
+						"type": "string",
+						"example": "DD/MM"
+					},
+					"year": {
+						"type": "string",
+						"example": "YYYY"
+					}
+				},
+				"required": [
+					"name",
+					"date",
+					"year"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ApiResponse_HolidaysDTO-Array_": {
+				"properties": {
+					"success": {
+						"type": "boolean"
+					},
+					"message": {
+						"type": "string"
+					},
+					"data": {
+						"items": {
+							"$ref": "#/components/schemas/HolidaysDTO"
+						},
+						"type": "array"
+					},
+					"error": {},
+					"token": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"success",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ApiResponse_any_": {
+				"properties": {
+					"success": {
+						"type": "boolean"
+					},
+					"message": {
+						"type": "string"
+					},
+					"data": {},
+					"error": {},
+					"token": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"success",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"HolidaysEntity": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"date": {
+						"type": "string"
+					},
+					"year": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"id",
+					"name",
+					"date",
+					"year"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"UpdateHolidaysDTO": {
+				"properties": {
+					"name": {
+						"type": "string",
+						"example": "good friday"
+					},
+					"date": {
+						"type": "string",
+						"example": "DD/MM"
+					},
+					"year": {
+						"type": "string",
+						"example": "YYYY"
+					},
+					"id": {
+						"type": "number",
+						"format": "double",
+						"example": 1
+					}
+				},
+				"required": [
+					"name",
+					"date",
+					"year"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ApiResponse_null_": {
+				"properties": {
+					"success": {
+						"type": "boolean"
+					},
+					"message": {
+						"type": "string"
+					},
+					"data": {
+						"type": "number",
+						"enum": [
+							null
+						],
+						"nullable": true
+					},
+					"error": {},
+					"token": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"success",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"EmployeeCreateDTO": {
+				"properties": {
+					"name": {
+						"type": "string",
+						"example": "jhon deo"
+					},
+					"DOJ": {
+						"type": "string",
+						"example": "DD/MM/YYYY"
+					},
+					"email": {
+						"type": "string",
+						"example": "@example.com"
+					}
+				},
+				"required": [
+					"name",
+					"DOJ",
+					"email"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ApiResponse_EmployeeCreateDTO-Array_": {
+				"properties": {
+					"success": {
+						"type": "boolean"
+					},
+					"message": {
+						"type": "string"
+					},
+					"data": {
+						"items": {
+							"$ref": "#/components/schemas/EmployeeCreateDTO"
+						},
+						"type": "array"
+					},
+					"error": {},
+					"token": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"success",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"UserType": {
+				"enum": [
+					1,
+					2
+				],
+				"type": "number"
+			},
+			"InstanceType_any_": {
+				"$ref": "#/components/schemas/UserEntity",
+				"description": "Obtain the return type of a constructor function type"
+			},
+			"UserEntity": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"password": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"type": {
+						"$ref": "#/components/schemas/UserType"
+					},
+					"employee": {
+						"$ref": "#/components/schemas/InstanceType_any_"
+					}
+				},
+				"required": [
+					"id",
+					"password",
+					"email",
+					"type",
+					"employee"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"EmployeeEntity": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"DOJ": {
+						"type": "string"
+					},
+					"user": {
+						"$ref": "#/components/schemas/InstanceType_any_"
+					}
+				},
+				"required": [
+					"id",
+					"name",
+					"DOJ",
+					"user"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"HttpStatus": {
+				"enum": [
+					200,
+					201,
+					204,
+					400,
+					401,
+					403,
+					404,
+					409,
+					500
+				],
+				"type": "number"
+			},
+			"IResponse": {
+				"properties": {
+					"success": {
+						"type": "boolean"
+					},
+					"message": {
+						"type": "string"
+					},
+					"data": {},
+					"statusCode": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"success",
+					"message",
+					"data",
+					"statusCode"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"UpdateEmployeeDTO": {
+				"properties": {
+					"name": {
+						"type": "string",
+						"example": "jhon deo"
+					},
+					"DOJ": {
+						"type": "string",
+						"example": "DD/MM/YYYY"
+					}
+				},
+				"required": [
+					"name",
+					"DOJ"
+				],
+				"type": "object",
+				"additionalProperties": false
+			}
+		},
+		"securitySchemes": {
+			"jwt": {
+				"type": "http",
+				"scheme": "bearer",
+				"bearerFormat": "JWT"
+			}
+		}
+	},
+	"info": {
+		"title": "employee_attendance",
+		"version": "0.1.0",
+		"contact": {}
+	},
+	"paths": {
+		"/holidays": {
+			"get": {
+				"operationId": "GetAll",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ApiResponse_HolidaysDTO-Array_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Holidays"
+				],
+				"security": [],
+				"parameters": []
+			},
+			"post": {
+				"operationId": "Save",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"properties": {
+												"error": {},
+												"data": {
+													"$ref": "#/components/schemas/HolidaysEntity"
+												},
+												"message": {
+													"type": "string"
+												},
+												"success": {
+													"type": "boolean"
+												}
+											},
+											"required": [
+												"data",
+												"message",
+												"success"
+											],
+											"type": "object"
+										},
+										{
+											"properties": {
+												"data": {},
+												"error": {},
+												"message": {
+													"type": "string"
+												},
+												"success": {
+													"type": "boolean"
+												}
+											},
+											"required": [
+												"error",
+												"message",
+												"success"
+											],
+											"type": "object"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Holidays"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/HolidaysDTO"
+							}
+						}
+					}
+				}
+			},
+			"put": {
+				"operationId": "Update",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"properties": {
+												"error": {},
+												"data": {},
+												"message": {
+													"type": "string"
+												},
+												"success": {
+													"type": "boolean"
+												}
+											},
+											"required": [
+												"message",
+												"success"
+											],
+											"type": "object"
+										},
+										{
+											"properties": {
+												"error": {},
+												"data": {
+													"$ref": "#/components/schemas/HolidaysEntity"
+												},
+												"message": {
+													"type": "string"
+												},
+												"success": {
+													"type": "boolean"
+												}
+											},
+											"required": [
+												"data",
+												"message",
+												"success"
+											],
+											"type": "object"
+										},
+										{
+											"properties": {
+												"data": {},
+												"error": {},
+												"message": {
+													"type": "string"
+												},
+												"success": {
+													"type": "boolean"
+												}
+											},
+											"required": [
+												"error",
+												"message",
+												"success"
+											],
+											"type": "object"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Holidays"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdateHolidaysDTO"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/holidays/{id}": {
+			"get": {
+				"operationId": "GetById",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ApiResponse_any_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Holidays"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
+			"delete": {
+				"operationId": "Delete",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ApiResponse_null_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Holidays"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/employee": {
+			"get": {
+				"operationId": "GetAll",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ApiResponse_EmployeeCreateDTO-Array_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"employee"
+				],
+				"security": [],
+				"parameters": []
+			},
+			"post": {
+				"operationId": "Save",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"properties": {
+												"error": {},
+												"statusCode": {
+													"$ref": "#/components/schemas/HttpStatus"
+												},
+												"data": {
+													"$ref": "#/components/schemas/EmployeeEntity"
+												},
+												"message": {
+													"type": "string"
+												},
+												"success": {
+													"type": "boolean"
+												}
+											},
+											"required": [
+												"statusCode",
+												"data",
+												"message",
+												"success"
+											],
+											"type": "object"
+										},
+										{
+											"properties": {
+												"data": {},
+												"statusCode": {
+													"$ref": "#/components/schemas/HttpStatus"
+												},
+												"error": {},
+												"message": {
+													"type": "string"
+												},
+												"success": {
+													"type": "boolean"
+												}
+											},
+											"required": [
+												"statusCode",
+												"error",
+												"message",
+												"success"
+											],
+											"type": "object"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"employee"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/EmployeeCreateDTO"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/employee/{id}": {
+			"get": {
+				"operationId": "GetById",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ApiResponse_any_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"employee"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
+			"put": {
+				"operationId": "Update",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/IResponse"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"employee"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdateEmployeeDTO"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "Delete",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ApiResponse_null_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"employee"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		}
+	},
+	"servers": [
+		{
+			"url": "/api"
+		}
+	]
+}
