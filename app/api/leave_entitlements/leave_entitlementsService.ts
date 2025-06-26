@@ -8,39 +8,28 @@ import {
   MESSAGES,
   missingDataMessage,
 } from "../constants/messages";
-import { EmployeeCreateDTO, UpdateEmployeeDTO } from "./Employee.dto";
-import { EmployeeEntity } from "../db/entities/employee";
+import { LeaveEntitlementsCreateDTO, UpdateLeaveEntitlementsDTO } from "./leave_entitlements.dto";
 import { UserEntity } from "../db/entities/user";
 import { UserType } from "../common.enum";
-import { log } from "util";
-import { error } from "console";
-import { groupCount } from "../utils/functions";
+import { EmployeeEntity } from "../db/entities/employee";
 import { LeaveEntitlementsEntity } from "../db/entities/leave_entitlements";
-import { getDuration } from "../utils/calender";
 
-export class EmployeeService {
+export class LeaveEntitlementsService {
   private dataSource!: DataSource;
-  private repository!: Repository<EmployeeEntity>;
-  private userRepository!: Repository<UserEntity>;
-  private leave_entitlements!: Repository<LeaveEntitlementsEntity>;
+  private repository!: Repository<LeaveEntitlementsEntity>;
+  private empRepository!: Repository<EmployeeEntity>;
 
   public async init() {
     this.dataSource = await initDB();
-    this.repository = this.dataSource.getRepository(EmployeeEntity);
-    this.userRepository = this.dataSource.getRepository(UserEntity);
-    this.leave_entitlements = this.dataSource.getRepository(LeaveEntitlementsEntity);
+    this.repository = this.dataSource.getRepository(LeaveEntitlementsEntity);
+    this.empRepository = this.dataSource.getRepository(EmployeeEntity);
   }
 
   async get() {
     try {
       const tags = await this.repository.find({
-        relations: ['user','attendance'],
-        order: { id: "DESC" },
+        // order: { id: "DESC" },
       });
-      
-      tags.map((item:any)=>{
-        item.DOJ = new Date(item.DOJ).toLocaleDateString("en-GB");
-      })
       const response: IResponse = {
         success: true,
         message: MESSAGES.DATA_LIST_SUCCESS,
@@ -60,26 +49,11 @@ export class EmployeeService {
 
   async getById(id: number) {
     try {
-      const tag:any = await this.repository.findOne({
-        where:{id},
-        relations:['user','attendance']
-      });
-      if(!tag){
-        throw {
-          success: false,
-          message: MESSAGES.DATA_LIST_FAILURE,
-          data: null,
-          statusCode: HttpStatus.BAD_REQUEST,
-        } as IResponse;
-      }
-      
-      const leave_criteria = await this.leave_entitlements.find();
-      const groupdate = groupCount(tag.attendance,leave_criteria)
-      const experience = getDuration(tag.DOJ);
+      const tag = await this.repository.findOneBy({ id });
       const response: IResponse = {
         success: true,
         message: MESSAGES.DATA_LIST_SUCCESS,
-        data: {...tag,experience,leave_info:groupdate,DOJ:new Date(tag.DOJ).toLocaleDateString("en-GB")},
+        data: tag,
         statusCode: HttpStatus.OK,
       };
       return response;
@@ -93,31 +67,18 @@ export class EmployeeService {
     }
   }
 
-  async save(payload: EmployeeCreateDTO) {
-    const newEmp:any ={};
-    const newUser = new UserEntity();
-    newEmp.name = payload.name;
-    newEmp.DOJ = payload.DOJ.split("T")[0];
-    newEmp.employee_id = payload.employee_id;
-    newUser.email = payload.email;
-    newUser.password = "123456";
-    newUser.type = UserType.EMPLOYEE;
-    // newEmp.user = newUser;
+  async save(payload: LeaveEntitlementsCreateDTO) {
     try {
-      const employeeEntity = this.repository.create({
-        ...newEmp,
-        user:newUser
-      })
-      const response = await this.repository.save(employeeEntity);
-      
+      const LeaveEntitlementsEntity = this.repository.create(payload)
+      const response = await this.repository.save(LeaveEntitlementsEntity);
       return {
         success: true,
-        message: getSuccessMessage("Employee"),
+        message: getSuccessMessage("LeaveEntitlements"),
         data: response,
         statusCode: HttpStatus.CREATED,
       };
     } catch (error:any) {
-      throw  {
+      throw {
         success: false,
         message: error.message,
         error: error,
@@ -127,9 +88,9 @@ export class EmployeeService {
   }
 
   async update(id: number, payload: any) {
-      const {email, ...employee} = payload;
     try {
-      const tag = await this.repository.findOne({where:{id},relations:["user"]});
+      
+      const tag = await this.repository.findOneBy({ id });
       if (!tag) {
         throw {
           success: false,
@@ -138,13 +99,11 @@ export class EmployeeService {
           statusCode: HttpStatus.BAD_REQUEST,
         } as IResponse;
       }
-      employee.user = tag.user;
-      employee.user.email = email;
-      employee.DOJ = employee.DOJ.split("T")[0];
-      const response = await this.repository.save(employee);
+      
+      const response = await this.repository.save(payload);
       return {
         success: true,
-        message: getSuccessMessage("Emaploye"),
+        message: getSuccessMessage("LeaveEntitlements"),
         data: response,
         statusCode: HttpStatus.OK,
       } as IResponse;
@@ -160,12 +119,7 @@ export class EmployeeService {
 
   async delete(id: number) {
      try {
-    const tag = await this.repository.findOne({
-      where:{id},
-      // relations: ["user"],
-    }
-    );
-    
+    const tag = await this.repository.findOneBy({id});
     if (!tag) {
       throw {
         success: false,
@@ -174,8 +128,7 @@ export class EmployeeService {
         statusCode: HttpStatus.BAD_REQUEST,
       }as IResponse;
     }
-      // await this.userRepository.remove(tag.user);
-      await this.repository.remove(tag);
+      await this.repository.delete(id);
       return {
         success: true,
         message: MESSAGES.DELETE_SUCCESS,
@@ -185,7 +138,7 @@ export class EmployeeService {
     } catch (error:any) {
       return {
         success: false,
-        message:error.message,
+        message: error.message,
         error,
       };
     }

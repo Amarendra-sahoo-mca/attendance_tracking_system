@@ -20,7 +20,7 @@ function Sidebar() {
       id: 2,
       name: "employee",
       icon: GraduationCap,
-      path: "/app/dashboard/employee",
+      path: "/app/employee",
     },
     {
       id: 3,
@@ -35,7 +35,7 @@ function Sidebar() {
       path: "/app/settings",
     },
   ];
-  
+
   return (
     <div className="dark:bg-[#0a0a0a] bg-white w-full h-screen border shadow-md pt-5 px-2">
       <div className="">
@@ -49,11 +49,17 @@ function Sidebar() {
         <hr className="mt-5 mb-2 w-[95%] mx-auto" />
 
         {menu_list.map((item: any, index: number) => {
-          const isActive = pathname === item.path;
+         
+          const isActive =  pathname.startsWith(item.path);
           return (
             <Link href={item.path} key={item.id} passHref>
-              <h2 className={`flex items-center pl-4 gap-3 h-12 cursor-pointer transition-all rounded-lg text-slate-500 capitalize ${isActive ? "bg-primary text-white"
-                    : "text-slate-500 hover:bg-slate-200 hover:text-black"}`}>
+              <h2
+                className={`flex items-center pl-4 gap-3 h-12 cursor-pointer transition-all rounded-lg text-slate-500 capitalize ${
+                  isActive
+                    ? "bg-primary text-white"
+                    : "text-slate-500 hover:bg-slate-200 hover:text-black"
+                }`}
+              >
                 <item.icon />
                 {item.name}
               </h2>

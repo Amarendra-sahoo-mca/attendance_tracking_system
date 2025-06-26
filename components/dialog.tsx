@@ -24,9 +24,11 @@ import { Calendar } from "./ui/calendar";
 export type Field = {
   name: string;
   label: string;
-  type: "text" | "email" | "date";
+  type: "text" | "email" | "date" | "select" | "searchable-select" | 'checkbox' | 'textarea';
   placeholder?: string;
   required?: boolean;
+  disabled?: boolean
+  options?: { label: string; value: string }[];
 };
 
 type Mode = "form" | "confirm";
@@ -38,8 +40,8 @@ interface DynamicDialogProps {
   description?: string;
   mode: Mode;
   fields?: Field[]; // Only for form mode
-  defaultValues?: Record<string, any>; // ✅ New optional prop
-  onSubmit: (data?: any) => void; // Used in both form & confirm mode
+  defaultValues?: Record<string, any>; // Used for form and confirm
+  onSubmit: (data?: any) => void;
 }
 
 export default function DynamicDialogForm({
@@ -49,7 +51,7 @@ export default function DynamicDialogForm({
   fields,
   onSubmit,
   mode,
-  defaultValues = {}, // ✅ default fallback
+  defaultValues = {},
 }: DynamicDialogProps) {
   const {
     register,
@@ -59,19 +61,19 @@ export default function DynamicDialogForm({
     formState: { errors },
   } = useForm({ defaultValues });
 
-  // // ✅ Reset the form when defaultValues change
+  // // Reset the form when defaultValues change (for edit case)
   // useEffect(() => {
   //   reset(defaultValues);
   // }, [defaultValues, reset]);
 
   const handleFormSubmit = (data: any) => {
-    onSubmit(data);
-    reset();
-    setOpen(false);
+    onSubmit(data);  // Send submitted data
+    reset();         // Clear form state
+    setOpen(false);  // Close dialog
   };
 
-  const handleConfirm = (data: any) => {
-    onSubmit(data);
+  const handleConfirm = () => {
+    onSubmit(defaultValues); // Pass the selected item’s ID or data
     setOpen(false);
   };
 
@@ -120,17 +122,6 @@ export default function DynamicDialogForm({
                             fromYear={1950}
                             toYear={new Date().getFullYear()}
                             className="rounded-md border shadow dark:bg-popover dark:border-border"
-                            classNames={{
-                              caption:
-                                "flex justify-center gap-2 pt-1 relative items-center ",
-                              caption_label: "text-sm font-medium",
-                              dropdown:
-                                "bg-background border px-2 py-1 text-sm rounded-md",
-                              day: "hover:bg-accent hover:text-accent-foreground rounded-md w-9 h-9 p-0 font-normal",
-                              day_selected:
-                                "bg-primary text-primary-foreground hover:bg-primary/90",
-                              day_today: "border border-primary",
-                            }}
                           />
                         </PopoverContent>
                       </Popover>
@@ -151,9 +142,7 @@ export default function DynamicDialogForm({
               <Button
                 type="button"
                 variant="ghost"
-                onClick={() => {
-                  setOpen(false);
-                }}
+                onClick={() => setOpen(false)}
               >
                 Cancel
               </Button>
@@ -173,7 +162,7 @@ export default function DynamicDialogForm({
             </Button>
             <Button
               type="button"
-              className="bg-red-600"
+              className="bg-red-600 text-white"
               onClick={handleConfirm}
             >
               Yes

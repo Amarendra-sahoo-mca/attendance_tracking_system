@@ -69,12 +69,12 @@ export class HolidaysService {
         statusCode: HttpStatus.OK,
       };
       return responce;
-    } catch (error) {
+    } catch (error:any) {
       console.log(error);
 
       return {
         success: false,
-        message: MESSAGES.DATA_LIST_FAILURE,
+        message: error.message,
         error: error,
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
       };
@@ -99,10 +99,10 @@ export class HolidaysService {
         statusCode: HttpStatus.OK,
       };
       return responce;
-    } catch (error) {
+    } catch (error:any) {
       return {
         success: false,
-        message: MESSAGES.DATA_LIST_FAILURE,
+        message: error.message,
         error: error,
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
       };
@@ -119,11 +119,11 @@ export class HolidaysService {
         message: getSuccessMessage("Holyday"),
         data: response,
       };
-    } catch (error) {
+    } catch (error:any) {
       console.error("Holyday Save Error:", error);
       return {
         success: false,
-        message: getErrorMessage("Holyday"),
+        message: error.message,
         error: error,
       };
     }
@@ -147,10 +147,10 @@ export class HolidaysService {
         message: getSuccessMessage("Holyday"),
         data: response,
       };
-    } catch (error) {
+    } catch (error:any) {
       return {
         success: false,
-        message: getErrorMessage("Holyday"),
+        message: error.message,
         error,
       };
     }
@@ -171,10 +171,10 @@ export class HolidaysService {
         success: true,
         message: MESSAGES.DELETE_SUCCESS,
       };
-    } catch (error) {
+    } catch (error:any) {
       return {
         success: false,
-        message: MESSAGES.DELETE_FAILURE,
+        message: error.message,
         error,
       };
     }

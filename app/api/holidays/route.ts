@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
         const response = await controller.save(body as HolidaysDTO);
         return NextResponse.json(response);
     } catch (error) {
-        NextResponse.json({ error }, { status: 500 });
+       return NextResponse.json({ error }, { status: 500 });
     }
 }
 

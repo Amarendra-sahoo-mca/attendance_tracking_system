@@ -120,3 +120,25 @@ export function getWorkingDaysIn2025(holidayList:any[]) {
 // ];
 
 // console.log(getWorkingDaysIn2025(Holidays));
+export function getDuration(fromDateStr:string) {
+  const fromDate = new Date(fromDateStr);
+  const toDate = new Date();
+
+  let years = toDate.getFullYear() - fromDate.getFullYear();
+  let months = toDate.getMonth() - fromDate.getMonth();
+  let days = toDate.getDate() - fromDate.getDate();
+
+  if (days < 0) {
+    months -= 1;
+    const prevMonth = new Date(toDate.getFullYear(), toDate.getMonth(), 0);
+    days += prevMonth.getDate();
+  }
+
+  if (months < 0) {
+    years -= 1;
+    months += 12;
+  }
+
+  return `${years}y ${months}m ${days}d`;
+}
+

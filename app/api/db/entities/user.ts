@@ -17,16 +17,15 @@ export class UserEntity {
     type:'enum',
     enum:UserType,
     default:UserType.EMPLOYEE,
-    comment: '1-TEACHER 2-EMPLOYEE'
+    comment: '1-ADMIN 2-EMPLOYEE'
   })
   type!:UserType;
 
   @OneToOne(
     () => require("./employee").EmployeeEntity,
     (employee: any) => employee.user,
-    { nullable: true ,onDelete: "CASCADE",}
+    { nullable: true,onDelete: "CASCADE" }
   )
-  @JoinColumn({ name: "company_id" })
   employee!: InstanceType<typeof import("./employee").EmployeeEntity>;
 }
 

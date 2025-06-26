@@ -13,6 +13,7 @@
     "swagger:watch": "chokidar 'app/api/**/*.ts' -c 'npm run swagger:generate'"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.1.1",
     "@radix-ui/react-dialog": "^1.1.14",
     "@radix-ui/react-label": "^2.1.7",
     "@radix-ui/react-popover": "^1.1.14",
@@ -23,7 +24,9 @@
     "class-validator": "^0.14.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "cmdk": "^1.1.1",
     "date-fns": "^3.6.0",
+    "framer-motion": "^12.18.1",
     "lucide-react": "^0.511.0",
     "mysql2": "^3.14.1",
     "next": "15.3.2",
@@ -35,10 +38,12 @@
     "react-hook-form": "^7.56.4",
     "react-icon": "^1.0.0",
     "react-icons": "^5.5.0",
+    "react-loading-indicators": "^1.0.1",
     "reflect-metadata": "^0.2.2",
     "sonner": "^2.0.5",
     "tailwind-merge": "^3.3.0",
-    "tsoa": "^6.6.0"
+    "tsoa": "^6.6.0",
+    "zod": "^3.25.67"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

@@ -13,6 +13,10 @@ export class EmployeeCreateDTO {
     @IsString()
     @Example("@example.com")
     email!: string;
+
+    @IsString()
+    @Example("ACPL@2021")
+    employee_id!: string;
 }
 
 export class UpdateEmployeeDTO  {

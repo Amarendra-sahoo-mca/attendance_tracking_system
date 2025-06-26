@@ -13,8 +13,10 @@ import { usePathname } from "next/navigation";
 
 export function BreadcrumbWithCustomSeparator() {
   const pathname = usePathname();
-  const pathSegments = pathname.split("/").filter(Boolean).slice(1); // e.g. ['app', 'students', 'view']
-  
+  let pathSegments = pathname.split("/").filter(Boolean).slice(1); // e.g. ['app', 'students', 'view']
+  if (!isNaN(Number(pathSegments[pathSegments.length - 1]))) {
+  pathSegments = pathSegments.slice(0, -1);
+}
   const getpath = (target:string)=> {
     const index = pathSegments.indexOf(target);
     const path = pathSegments.slice(0, index+1).join("/");

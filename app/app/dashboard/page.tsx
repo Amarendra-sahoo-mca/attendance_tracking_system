@@ -13,6 +13,7 @@ import { GrUserWorker } from "react-icons/gr";
 import { FaCalendarAlt } from "react-icons/fa";
 import { Chart } from "react-google-charts";
 import DashboardSkleton from "@/components/dashboardSkleton";
+import CountUp from "@/components/ui/count_up";
 
 function dashboard() {
   const [loading, setLoading] = useState(true);
@@ -62,10 +63,9 @@ function dashboard() {
     ["Days Left", daysLeft],
     ["Completed Days", completedDays],
   ];
-let graphdata = apiholidays?.data?.workingdayGraph
-  ? [["Month", "Days"], ...apiholidays.data.workingdayGraph]
-  : [["Month", "Days"]];
-  
+  let graphdata = apiholidays?.data?.workingdayGraph
+    ? [["Month", "Days"], ...apiholidays.data.workingdayGraph]
+    : [["Month", "Days"]];
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -91,9 +91,14 @@ let graphdata = apiholidays?.data?.workingdayGraph
                         className="h-[122px] w-[220px]  rounded-lg border-2 p-2 shadow-lg dark:shadow-primary"
                       >
                         <div className="flex items-center justify-between">
-                          <p className="text-4xl mt-3 font-semibold ">
-                            {item.value}
-                          </p>
+                            <CountUp
+                              from={0}
+                              to={item.value}
+                              separator=","
+                              direction="up"
+                              duration={1}
+                              className="count-up-text font-bold text-4xl mt-3"
+                            />
                           <div className="mt-5">{getIconByName(item.name)}</div>
                         </div>
                         <p className="font-semibold mt-2">{item.name}</p>

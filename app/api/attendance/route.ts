@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { EmployeeController } from "./EmployeeController";
-import { EmployeeCreateDTO, UpdateEmployeeDTO } from "./Employee.dto";
+import { AttendanceController } from "./AttendanceController";
+import { AttendanceCreateDTO, UpdateAttendanceDTO } from "./Attendance.dto";
 
 
-const controller = new EmployeeController();
+const controller = new AttendanceController();
 
 export async function GET(request: NextRequest) {
     try {
@@ -16,11 +16,12 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
     const body = await request.json();
+
     try {
-        const response = await controller.save(body as EmployeeCreateDTO);
+        const response = await controller.save(body as AttendanceCreateDTO);
         return NextResponse.json(response);
-    } catch (error:any) {
-       return NextResponse.json(error , { status: error.statusCode || 500 });
+    } catch (error) {
+       return NextResponse.json({ error }, { status: 500 });
     }
 }
 

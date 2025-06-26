@@ -7,6 +7,199 @@
 		"requestBodies": {},
 		"responses": {},
 		"schemas": {
+			"LeaveType": {
+				"enum": [
+					"Vacation",
+					"Sickness",
+					"Maternity",
+					"Compassionate",
+					"TOIL",
+					"Work From Home",
+					"Bank Holiday"
+				],
+				"type": "string"
+			},
+			"LeaveEntitlementsCreateDTO": {
+				"properties": {
+					"type": {
+						"$ref": "#/components/schemas/LeaveType",
+						"example": "Sickness"
+					},
+					"theme": {
+						"type": "string"
+					},
+					"days": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"type",
+					"theme",
+					"days"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ApiResponse_LeaveEntitlementsCreateDTO-Array_": {
+				"properties": {
+					"success": {
+						"type": "boolean"
+					},
+					"message": {
+						"type": "string"
+					},
+					"data": {
+						"items": {
+							"$ref": "#/components/schemas/LeaveEntitlementsCreateDTO"
+						},
+						"type": "array"
+					},
+					"error": {},
+					"token": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"success",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ApiResponse_any_": {
+				"properties": {
+					"success": {
+						"type": "boolean"
+					},
+					"message": {
+						"type": "string"
+					},
+					"data": {},
+					"error": {},
+					"token": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"success",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"LeaveEntitlementsEntity": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"type": {
+						"type": "string"
+					},
+					"theme": {
+						"type": "string"
+					},
+					"days": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"id",
+					"type",
+					"theme",
+					"days"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"HttpStatus": {
+				"enum": [
+					200,
+					201,
+					204,
+					400,
+					401,
+					403,
+					404,
+					409,
+					500
+				],
+				"type": "number"
+			},
+			"IResponse": {
+				"properties": {
+					"success": {
+						"type": "boolean"
+					},
+					"message": {
+						"type": "string"
+					},
+					"data": {},
+					"statusCode": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"success",
+					"message",
+					"data",
+					"statusCode"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"UpdateLeaveEntitlementsDTO": {
+				"properties": {
+					"type": {
+						"$ref": "#/components/schemas/LeaveType",
+						"example": "Sickness"
+					},
+					"theme": {
+						"type": "string"
+					},
+					"days": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"type",
+					"theme",
+					"days"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ApiResponse_null_": {
+				"properties": {
+					"success": {
+						"type": "boolean"
+					},
+					"message": {
+						"type": "string"
+					},
+					"data": {
+						"type": "number",
+						"enum": [
+							null
+						],
+						"nullable": true
+					},
+					"error": {},
+					"token": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"success",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"HolidaysDTO": {
 				"properties": {
 					"name": {
@@ -56,27 +249,6 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"ApiResponse_any_": {
-				"properties": {
-					"success": {
-						"type": "boolean"
-					},
-					"message": {
-						"type": "string"
-					},
-					"data": {},
-					"error": {},
-					"token": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"success",
-					"message"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
 			"HolidaysEntity": {
 				"properties": {
 					"id": {
@@ -89,6 +261,9 @@
 					"date": {
 						"type": "string"
 					},
+					"endDate": {
+						"type": "string"
+					},
 					"year": {
 						"type": "string"
 					}
@@ -97,6 +272,7 @@
 					"id",
 					"name",
 					"date",
+					"endDate",
 					"year"
 				],
 				"type": "object",
@@ -130,33 +306,6 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"ApiResponse_null_": {
-				"properties": {
-					"success": {
-						"type": "boolean"
-					},
-					"message": {
-						"type": "string"
-					},
-					"data": {
-						"type": "number",
-						"enum": [
-							null
-						],
-						"nullable": true
-					},
-					"error": {},
-					"token": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"success",
-					"message"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
 			"EmployeeCreateDTO": {
 				"properties": {
 					"name": {
@@ -170,12 +319,17 @@
 					"email": {
 						"type": "string",
 						"example": "@example.com"
+					},
+					"employee_id": {
+						"type": "string",
+						"example": "ACPL@2021"
 					}
 				},
 				"required": [
 					"name",
 					"DOJ",
-					"email"
+					"email",
+					"employee_id"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -258,7 +412,13 @@
 					"DOJ": {
 						"type": "string"
 					},
+					"employee_id": {
+						"type": "string"
+					},
 					"user": {
+						"$ref": "#/components/schemas/InstanceType_any_"
+					},
+					"attendance": {
 						"$ref": "#/components/schemas/InstanceType_any_"
 					}
 				},
@@ -266,44 +426,9 @@
 					"id",
 					"name",
 					"DOJ",
-					"user"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"HttpStatus": {
-				"enum": [
-					200,
-					201,
-					204,
-					400,
-					401,
-					403,
-					404,
-					409,
-					500
-				],
-				"type": "number"
-			},
-			"IResponse": {
-				"properties": {
-					"success": {
-						"type": "boolean"
-					},
-					"message": {
-						"type": "string"
-					},
-					"data": {},
-					"statusCode": {
-						"type": "number",
-						"format": "double"
-					}
-				},
-				"required": [
-					"success",
-					"message",
-					"data",
-					"statusCode"
+					"employee_id",
+					"user",
+					"attendance"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -325,6 +450,134 @@
 				],
 				"type": "object",
 				"additionalProperties": false
+			},
+			"AttendanceCreateDTO": {
+				"properties": {
+					"absence_type": {
+						"type": "string",
+						"example": "sicl leave"
+					},
+					"employee": {
+						"type": "number",
+						"format": "double"
+					},
+					"start_date": {
+						"type": "string",
+						"example": "DD/MM/YYYY"
+					},
+					"description": {
+						"type": "string",
+						"example": "peta katuchi"
+					},
+					"is_half_day": {
+						"type": "boolean"
+					},
+					"end_date": {
+						"type": "string",
+						"example": "DD/MM/YYYY"
+					}
+				},
+				"required": [
+					"absence_type",
+					"employee",
+					"start_date",
+					"description",
+					"is_half_day",
+					"end_date"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ApiResponse_AttendanceCreateDTO-Array_": {
+				"properties": {
+					"success": {
+						"type": "boolean"
+					},
+					"message": {
+						"type": "string"
+					},
+					"data": {
+						"items": {
+							"$ref": "#/components/schemas/AttendanceCreateDTO"
+						},
+						"type": "array"
+					},
+					"error": {},
+					"token": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"success",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"AttendanceEntity": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"absence_type": {
+						"type": "string"
+					},
+					"start_date": {
+						"type": "string"
+					},
+					"end_date": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"is_half_day": {
+						"type": "boolean"
+					},
+					"year": {
+						"type": "number",
+						"format": "double"
+					},
+					"employee": {
+						"$ref": "#/components/schemas/InstanceType_any_"
+					}
+				},
+				"required": [
+					"id",
+					"absence_type",
+					"start_date",
+					"end_date",
+					"description",
+					"is_half_day",
+					"year",
+					"employee"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"UpdateAttendanceDTO": {
+				"properties": {
+					"absence_type": {
+						"type": "string",
+						"example": "sicl leave"
+					},
+					"start_date": {
+						"type": "string",
+						"example": "DD/MM/YYYY"
+					},
+					"end_date": {
+						"type": "string",
+						"example": "DD/MM/YYYY"
+					}
+				},
+				"required": [
+					"absence_type",
+					"start_date",
+					"end_date"
+				],
+				"type": "object",
+				"additionalProperties": false
 			}
 		},
 		"securitySchemes": {
@@ -341,6 +594,180 @@
 		"contact": {}
 	},
 	"paths": {
+		"/leave_entitlements": {
+			"get": {
+				"operationId": "GetAll",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ApiResponse_LeaveEntitlementsCreateDTO-Array_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Leave Entitlements"
+				],
+				"security": [],
+				"parameters": []
+			},
+			"post": {
+				"operationId": "Save",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"statusCode": {
+											"$ref": "#/components/schemas/HttpStatus"
+										},
+										"data": {
+											"$ref": "#/components/schemas/LeaveEntitlementsEntity"
+										},
+										"message": {
+											"type": "string"
+										},
+										"success": {
+											"type": "boolean"
+										}
+									},
+									"required": [
+										"statusCode",
+										"data",
+										"message",
+										"success"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Leave Entitlements"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/LeaveEntitlementsCreateDTO"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/leave_entitlements/{id}": {
+			"get": {
+				"operationId": "GetById",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ApiResponse_any_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Leave Entitlements"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
+			"put": {
+				"operationId": "Update",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/IResponse"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Leave Entitlements"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdateLeaveEntitlementsDTO"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "Delete",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ApiResponse_null_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Leave Entitlements"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
 		"/holidays": {
 			"get": {
 				"operationId": "GetAll",
@@ -375,7 +802,14 @@
 											"properties": {
 												"error": {},
 												"data": {
-													"$ref": "#/components/schemas/HolidaysEntity"
+													"allOf": [
+														{
+															"$ref": "#/components/schemas/HolidaysDTO"
+														},
+														{
+															"$ref": "#/components/schemas/HolidaysEntity"
+														}
+													]
 												},
 												"message": {
 													"type": "string"
@@ -395,9 +829,7 @@
 											"properties": {
 												"data": {},
 												"error": {},
-												"message": {
-													"type": "string"
-												},
+												"message": {},
 												"success": {
 													"type": "boolean"
 												}
@@ -485,9 +917,7 @@
 											"properties": {
 												"data": {},
 												"error": {},
-												"message": {
-													"type": "string"
-												},
+												"message": {},
 												"success": {
 													"type": "boolean"
 												}
@@ -621,54 +1051,30 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"anyOf": [
-										{
-											"properties": {
-												"error": {},
-												"statusCode": {
-													"$ref": "#/components/schemas/HttpStatus"
-												},
-												"data": {
-													"$ref": "#/components/schemas/EmployeeEntity"
-												},
-												"message": {
-													"type": "string"
-												},
-												"success": {
-													"type": "boolean"
-												}
-											},
-											"required": [
-												"statusCode",
-												"data",
-												"message",
-												"success"
-											],
-											"type": "object"
+									"properties": {
+										"statusCode": {
+											"$ref": "#/components/schemas/HttpStatus"
 										},
-										{
-											"properties": {
-												"data": {},
-												"statusCode": {
-													"$ref": "#/components/schemas/HttpStatus"
-												},
-												"error": {},
-												"message": {
-													"type": "string"
-												},
-												"success": {
-													"type": "boolean"
-												}
+										"data": {
+											"items": {
+												"$ref": "#/components/schemas/EmployeeEntity"
 											},
-											"required": [
-												"statusCode",
-												"error",
-												"message",
-												"success"
-											],
-											"type": "object"
+											"type": "array"
+										},
+										"message": {
+											"type": "string"
+										},
+										"success": {
+											"type": "boolean"
 										}
-									]
+									},
+									"required": [
+										"statusCode",
+										"data",
+										"message",
+										"success"
+									],
+									"type": "object"
 								}
 							}
 						}
@@ -778,6 +1184,180 @@
 				},
 				"tags": [
 					"employee"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/attendance": {
+			"get": {
+				"operationId": "GetAll",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ApiResponse_AttendanceCreateDTO-Array_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Attendance"
+				],
+				"security": [],
+				"parameters": []
+			},
+			"post": {
+				"operationId": "Save",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"statusCode": {
+											"$ref": "#/components/schemas/HttpStatus"
+										},
+										"data": {
+											"$ref": "#/components/schemas/AttendanceEntity"
+										},
+										"message": {
+											"type": "string"
+										},
+										"success": {
+											"type": "boolean"
+										}
+									},
+									"required": [
+										"statusCode",
+										"data",
+										"message",
+										"success"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Attendance"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/AttendanceCreateDTO"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/attendance/{id}": {
+			"get": {
+				"operationId": "GetById",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ApiResponse_any_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Attendance"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
+			"put": {
+				"operationId": "Update",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/IResponse"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Attendance"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdateAttendanceDTO"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "Delete",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ApiResponse_null_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Attendance"
 				],
 				"security": [],
 				"parameters": [
