@@ -13,23 +13,26 @@ import { HolidaysDTO, UpdateHolidaysDTO } from "./Holidays.dto";
 import { HolidaysEntity } from "../db/entities/holidays";
 import { EmployeeEntity } from "../db/entities/employee";
 import { getRemainingWorkingDays, getWorkingDaysIn2025 } from "../utils/calender";
+import { ProjectsEntity } from "../db/entities/projectes.entity";
 
 export class HolidaysService {
   private dataSource!: DataSource;
   private repository!: Repository<HolidaysEntity>;
   private emprepository!: Repository<EmployeeEntity>;
+  private project!: Repository<ProjectsEntity>;
 
   public async init() {
     this.dataSource = await initDB();
     this.repository = this.dataSource.getRepository(HolidaysEntity);
     this.emprepository = this.dataSource.getRepository(EmployeeEntity);
+    this.project = this.dataSource.getRepository(ProjectsEntity);
   }
 
-  async get() {
+  async getDashboard() {
     try {
       const currentYear = new Date().getFullYear();
       const Holidays: any = await this.repository.find({
-        order: { id: "ASC" },
+        order: { date: "ASC" },
         where: { year: currentYear.toString() },
       });
       let groupHolidayCount = 0;
@@ -49,7 +52,7 @@ export class HolidaysService {
         }
       });
       const holidaysCount = Holidays.length - groupHolidayCount + groupHolidays;
-      const projects = 5;
+      const projects = await this.project.count();
       const employees = await this.emprepository.count();
       const totalWorkingDays = 365 - 76 - holidaysCount;
       const remainingWorkingdays = getRemainingWorkingDays(Holidays);
@@ -78,6 +81,28 @@ export class HolidaysService {
         error: error,
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
       };
+    }
+  }
+
+  async get() {
+    try {
+      const tags = await this.repository.find({
+        // order: { id: "DESC" },
+      });
+      const response: IResponse = {
+        success: true,
+        message: MESSAGES.DATA_LIST_SUCCESS,
+        data: tags,
+        statusCode: HttpStatus.OK,
+      };
+      return response;
+    } catch (error:any) {
+      return {
+        success: false,
+        message: error.message,
+        data: error,
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+      } as IResponse;
     }
   }
 
@@ -110,9 +135,10 @@ export class HolidaysService {
   }
 
   async save(payload: HolidaysDTO) {
-    const newHolyday = new HolidaysEntity();
-
     try {
+      payload.year = payload.date.substring(0, 4);
+      payload.date = payload.date.split('T')[0];
+      payload.endDate = payload.endDate && payload.endDate.split('T')[0];
       const response = await this.repository.save(payload);
       return {
         success: true,

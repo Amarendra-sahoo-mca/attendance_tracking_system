@@ -1,7 +1,6 @@
 import { useState } from "react";
 import {flexRender,getCoreRowModel,useReactTable,getSortedRowModel,SortingState,ColumnDef,
 } from "@tanstack/react-table";
-import { log } from "node:console";
 
 type TableComponentProps<T> = {
   data: T[];

@@ -1,4 +1,5 @@
 "use client";
+import React from 'react'
 import DynamicDialogForm from "@/components/dialog";
 import { DynamicForm } from "@/components/form";
 import TableComponent from "@/components/TanstackTable";
@@ -6,9 +7,9 @@ import { Pencil, Trash } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThreeDot } from "react-loading-indicators";
 import PaginationControl from "@/components/dynamicPagination";
-import { attendanceData } from "./manage_attendance";
+import { holidaysData } from './manage_holidays';
 
-function page() {
+function Holidays() {
   const {
     isLoading,
     openForm,
@@ -17,13 +18,11 @@ function page() {
     setOpenForm,
     setOpenEdit,
     openEdit,
-    editFields,
     fields,
     handelUpdateSubmit,
     handelsubmit,
     selectedAttendance,
     myFormSchema,
-    myeditFormSchema,
     openDelete,
     setOpenDelete,
     handleStudentdelete,
@@ -33,15 +32,14 @@ function page() {
     totalPages,
     updateAtdanceMutation,
     createAtdanceMutation,
-  } = attendanceData();
+  } = holidaysData();
   const columns = [
     { header: "SL No", cell: ({ row }: any) => <span>{row.index + 1}</span> },
     {
-      header: "employee",
-      accessorKey: "employee.name",
+      header: "name",
+      accessorKey: "name",
     },
-    { header: "absence type", accessorKey: "absence_type" },
-    { header: "date", accessorKey: "start_date" },
+    { header: "date", accessorKey: "date", cell: ({row}:any)=> <span>{row.original.date.split('T')[0]}</span> },
     {
       header: "action",
       cell: ({ row }: any) => (
@@ -55,13 +53,12 @@ function page() {
                 setOpenForm(true);
                 setSelectedAttendance({
                   ...row.original,
-                  start_date: new Date(row.original.start_date),
-                  end_date: row.original.end_date
-                    ? new Date(row.original.end_date)
-                    : new Date(),
-                  employee: row.original.employee.name,
+                  // end_date: row.original.end_date
+                  //   ? new Date(row.original.end_date)
+                  //   : new Date(),
                 });
-                setOpenmultipul(!!row.original.end_date);
+                setOpenmultipul(!!row.original.endDate);
+                
               }}
             />
           </div>
@@ -95,7 +92,7 @@ function page() {
       <div className="mx-9 my-2 w-[90%]">
         <div className="w-full flex justify-between mb-2 items-end h-12">
           <h2>
-            <b>Attendance</b>
+            <b>Holidays</b>
           </h2>
           {openForm ? (
             <div className="flex items-center cursor-pointer">
@@ -107,7 +104,7 @@ function page() {
                 onChange={() => setOpenmultipul(!openmultipul)}
               />
               <label htmlFor="check" className="ml-2 cursor-pointer">
-                Multiple Leaves
+                Multiple Holidays
               </label>
             </div>
           ) : (
@@ -118,7 +115,7 @@ function page() {
                 setOpenEdit(false);
               }}
             >
-              + Add New Leave
+              + Add New Holiday
             </Button>
           )}
         </div>
@@ -126,12 +123,12 @@ function page() {
         {openForm && (
           <div className="w-full h-auto rounded-lg border-2 p-2">
             <DynamicForm
-              fields={openEdit ? editFields : fields}
+              fields={fields}
               onSubmit={openEdit ? handelUpdateSubmit : handelsubmit}
               onCancel={() => setOpenForm(false)}
               submitButtonLabel={openEdit ? "Update" : "Save"}
               defaultValues={openEdit ? selectedAttendance : undefined}
-              schema={openEdit ? myeditFormSchema : myFormSchema}
+              schema={myFormSchema}
             />
           </div>
         )}
@@ -159,4 +156,5 @@ function page() {
   );
 }
 
-export default page;
+export default Holidays;
+

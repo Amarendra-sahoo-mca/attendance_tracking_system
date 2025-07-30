@@ -1,4 +1,4 @@
-import { IsNumber, IsString } from "class-validator";
+import { IsNumber, IsOptional, IsString } from "class-validator";
 import { Example } from "tsoa";
 
 export class HolidaysDTO {
@@ -11,8 +11,14 @@ export class HolidaysDTO {
     date!: string;
 
     @IsString()
+    @IsOptional()
+    @Example("DD/MM")
+    endDate!: string;
+
+    @IsString()
     @Example("YYYY")
     year!: string;
+
 }
 
 export class UpdateHolidaysDTO extends HolidaysDTO {

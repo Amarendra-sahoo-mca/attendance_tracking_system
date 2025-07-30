@@ -104,20 +104,7 @@ export function getWorkingDaysIn2025(holidayList:any[]) {
   return Object.entries(workingDays);
 }
 
-// // Your provided data
-// const Holidays = [
-//   { id: 1, name: "New Year", date: "2025-01-01", endDate: "", year: "2025" },
-//   { id: 2, name: "Makar Sankranti", date: "2025-01-14", endDate: "", year: "2025" },
-//   { id: 3, name: "Siva Ratri", date: "2025-02-26", endDate: "", year: "2025" },
-//   { id: 4, name: "Holi", date: "2025-03-15", endDate: "", year: "2025" },
-//   { id: 5, name: "Utkal divas", date: "2025-04-01", endDate: "", year: "2025" },
-//   { id: 6, name: "Labour day", date: "2025-05-01", endDate: "", year: "2025" },
-//   { id: 7, name: "Independence Day", date: "2025-08-15", endDate: "", year: "2025" },
-//   { id: 8, name: "Ganesh Puja", date: "2025-08-27", endDate: "", year: "2025" },
-//   { id: 9, name: "Durga Puja", date: "2025-08-01", endDate: "2025-08-02", year: "2025" },
-//   { id: 10, name: "Diwali", date: "2025-10-21", endDate: "", year: "2025" },
-//   { id: 11, name: "X-Mas", date: "2025-12-25", endDate: "", year: "2025" }
-// ];
+
 
 // console.log(getWorkingDaysIn2025(Holidays));
 export function getDuration(fromDateStr:string) {

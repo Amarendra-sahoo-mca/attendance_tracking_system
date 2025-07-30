@@ -8,28 +8,27 @@ import {
   MESSAGES,
   missingDataMessage,
 } from "../constants/messages";
-import { AttendanceCreateDTO, UpdateAttendanceDTO } from "./Attendance.dto";
+import { ProjectsCreateDTO, UpdateProjectsDTO } from "./projects.dto";
 import { UserEntity } from "../db/entities/user";
 import { UserType } from "../common.enum";
-import { AttendanceEntity } from "../db/entities/attendance";
 import { EmployeeEntity } from "../db/entities/employee";
+import { ProjectsEntity } from "../db/entities/projectes.entity";
 
-export class AttendanceService {
+export class ProjectsService {
   private dataSource!: DataSource;
-  private repository!: Repository<AttendanceEntity>;
+  private repository!: Repository<ProjectsEntity>;
   private empRepository!: Repository<EmployeeEntity>;
 
   public async init() {
     this.dataSource = await initDB();
-    this.repository = this.dataSource.getRepository(AttendanceEntity);
+    this.repository = this.dataSource.getRepository(ProjectsEntity);
     this.empRepository = this.dataSource.getRepository(EmployeeEntity);
   }
 
   async get() {
     try {
       const tags = await this.repository.find({
-        relations: ["employee"],
-        order: { id: "DESC" },
+        // order: { id: "DESC" },
       });
       const response: IResponse = {
         success: true,
@@ -68,30 +67,12 @@ export class AttendanceService {
     }
   }
 
-  async save(payload: AttendanceCreateDTO) {
-    try {
-      
-      const employee = await this.empRepository.findOneBy({id:payload.employee});
-      if(!employee){
-        throw {
-          success: false,
-          message: MESSAGES.DATA_LIST_FAILURE,
-          data: null,
-          statusCode: HttpStatus.BAD_REQUEST,
-        } as IResponse;
-      }
-      payload.start_date = payload.start_date.split("T")[0];
-      payload.end_date = payload.end_date ? payload.end_date.split("T")[0]: '';
-      const attendanceEntity = this.repository.create({
-        ...payload,
-        employee,
-        year: new Date().getFullYear()
-      })
-      
-      const response = await this.repository.save(attendanceEntity);
+  async save(payload: ProjectsCreateDTO){    try {
+      const ProjectsEntity = this.repository.create(payload)
+      const response = await this.repository.save(ProjectsEntity);
       return {
         success: true,
-        message: getSuccessMessage("Attendance"),
+        message: getSuccessMessage("Project"),
         data: response,
         statusCode: HttpStatus.CREATED,
       };
@@ -106,10 +87,9 @@ export class AttendanceService {
   }
 
   async update(id: number, payload: any) {
-    const {employee, ...rest} = payload;
-
     try {
-      const tag = await this.repository.findOne({ where: { id }, relations: ["employee"] });
+      
+      const tag = await this.repository.findOneBy({ id });
       if (!tag) {
         throw {
           success: false,
@@ -118,13 +98,11 @@ export class AttendanceService {
           statusCode: HttpStatus.BAD_REQUEST,
         } as IResponse;
       }
-      rest.start_date = rest.start_date.split("T")[0];
-      rest.end_date = rest.end_date ? rest.end_date.split("T")[0]: '';
-      Object.assign(tag, rest);
-      const response = await this.repository.save(tag);
+      
+      const response = await this.repository.save(payload);
       return {
         success: true,
-        message: getSuccessMessage("Attendance"),
+        message: getSuccessMessage("Project"),
         data: response,
         statusCode: HttpStatus.OK,
       } as IResponse;

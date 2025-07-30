@@ -7,16 +7,26 @@ import DynamicDialogForm from "@/components/dialog";
 import { DynamicForm } from "@/components/form";
 import { PATHS } from "@/constants/end_points";
 import { ThreeDot } from "react-loading-indicators";
-import { employeeData } from "./manage_employee";
 import PaginationControl from "@/components/dynamicPagination";
+import {ProjectData} from './manage_Project';
 
-function Student() {
+// Utility function to format date from ISO string to DD-MM-YYYY
+const formatDate = (dateString: string): string => {
+  if (!dateString) return '';
+  const date = new Date(dateString);
+  const day = date.getDate().toString().padStart(2, '0');
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const year = date.getFullYear();
+  return `${day}-${month}-${year}`;
+};
+
+function Project() {
   const {
     isLoading,
     openForm,
     setOpenForm,
     setOpenEdit,
-    studentFields,
+    ProjectFields,
     openEdit,
     handleStudentEditSubmit,
     handleStudentSubmit,
@@ -30,20 +40,29 @@ function Student() {
     totalPages,
     setSelectedStudent,
     setCurrentPage
-  } = employeeData();
+  } = ProjectData();
 
   const columns: ColumnDef<any>[] = [
     { header: "SL No", cell: ({ row }) => <span>{row.index + 1}</span> },
     {
-      header: "employee id",
-      accessorKey: "employee_id",
-    },
-    {
       header: "name",
       accessorKey: "name",
     },
-    { header: "mail", accessorKey: "user.email" },
-    { header: "date of join", accessorKey: "DOJ" },
+    { header: "cost", accessorKey: "cost" , cell:({row})=>(
+      <div className="">
+        &#8377;&nbsp;{row.original.cost?.toLocaleString()}
+      </div>
+    )},
+    { header: "start date", accessorKey: "start_date", cell:({row})=>(
+      <div className="">
+        {formatDate(row.original.start_date)}
+      </div>
+    ) },
+    { header: "end date", accessorKey: "end_date", cell:({row})=>(
+      <div className="">
+        {formatDate(row.original.end_date)}
+      </div>
+    ) },
     {
       header: "action",
       cell: ({ row }) => (
@@ -56,12 +75,7 @@ function Student() {
                 e.stopPropagation();
                 setOpenEdit(true);
                 setOpenForm(true);
-                const { user, ...rest } = row.original;
-                setSelectedStudent({
-                  ...rest,
-                  email: user.email,
-                  DOJ: new Date(row.original.DOJ),
-                });
+                setSelectedStudent(row.original);
               }}
             />
           </div>
@@ -99,7 +113,7 @@ function Student() {
     <div className="w-full ">
       <div className=" mx-9 my-2 w-[90%] flex justify-between items-end h-12   ">
         <h2>
-          <b>Employes</b>
+          <b>Project</b>
         </h2>
         <Button
           className={`bg-primary cursor-pointer dark:text-white ${
@@ -110,13 +124,13 @@ function Student() {
             setOpenEdit(false);
           }}
         >
-          + Add New Employe
+          + Add New Project
         </Button>
       </div>
       {openForm && (
         <div className="w-[90%] ml-8 h-auto rounded-lg border-2 p-2 ">
           <DynamicForm
-            fields={studentFields}
+            fields={ProjectFields}
             onSubmit={openEdit ? handleStudentEditSubmit : handleStudentSubmit}
             defaultValues={openEdit && selectedStudent}
             submitButtonLabel={openEdit ? "update" : "save"}
@@ -140,7 +154,7 @@ function Student() {
         <TableComponent
           data={paginatedData || []}
           columns={columns}
-          navigateTo={(row) => `${PATHS.EMP_PROFILE}/${row.id}`}
+          
         />
         <PaginationControl
                   totalPages={totalPages}
@@ -151,4 +165,4 @@ function Student() {
   );
 }
 
-export default Student;
+export default Project;

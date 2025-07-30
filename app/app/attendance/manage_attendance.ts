@@ -6,7 +6,7 @@ import {
   editAttendance,
   getAllEmpDD,
 } from "@/service/attendance.api";
-import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueries, useQueryClient,UseQueryResult  } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
 import * as z from "zod";
@@ -33,8 +33,6 @@ export function attendanceData() {
     ],
   });
 
-  const isLoading = leavesData.isLoading;
-
   const createAtdanceMutation = useMutation({
     mutationFn: createAttendance,
     onSuccess: () => {
@@ -52,6 +50,11 @@ export function attendanceData() {
     },
     onError: () => toast("Failed to update attendance"),
   });
+  
+const isLoading = leavesData.isLoading;
+  // updateAtdanceMutation.isLoading ||
+  // createAtdanceMutation.isLoading ||
+  
 
   const deleteEmpMutation = useMutation({
     mutationFn: deleteAttendance,
@@ -64,10 +67,12 @@ export function attendanceData() {
 
   const handelsubmit = (data: any) => {
     createAtdanceMutation.mutate(data);
+    setOpenForm(false);
   };
 
   const handelUpdateSubmit = (data: any) => {
     updateAtdanceMutation.mutate(data);
+    setOpenForm(false);
   };
 
   const handleStudentdelete = (data: any) => {
@@ -134,13 +139,26 @@ export function attendanceData() {
   const editFields: Field[] = [
     {
       name: "employee",
-      label: "Employee",
+      label: "Employee name",
       type: "text",
-      required: true,
+      required: false,
       disabled: true,
     } as Field,
     ...fields.slice(1),
   ];
+
+  const myeditFormSchema = z
+    .object({
+      employee: z.string().min(1, "Employee is not required"),
+      absence_type: z.string().min(1, "Absence Type is required"),
+      description: z.string().min(1, "Leave Description is required"),
+      start_date: z.date({ required_error: "Start date required" }),
+      end_date: z.date().optional(),
+    })
+    .refine((data) => !data.end_date || data.end_date > data.start_date, {
+      message: "End date must be after start date",
+      path: ["end_date"],
+    });
 
   const myFormSchema = z
     .object({
@@ -154,20 +172,19 @@ export function attendanceData() {
       message: "End date must be after start date",
       path: ["end_date"],
     });
+  
 
   const attendanceList = leavesData.data || [];
   const itemsPerPage = 10;
   const totalPages = Math.ceil(attendanceList.length / itemsPerPage);
 
-  const paginatedData = attendanceList.slice(
+  const paginatedData = attendanceList.length > 0  && attendanceList.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
 
   return {
     isLoading,
-    leavesData,
-    currentPage,
     openForm,
     openmultipul,
     setOpenmultipul,
@@ -180,6 +197,7 @@ export function attendanceData() {
     handelsubmit,
     selectedAttendance,
     myFormSchema,
+    myeditFormSchema,
     openDelete,
     setOpenDelete,
     handleStudentdelete,
@@ -187,5 +205,7 @@ export function attendanceData() {
     setSelectedAttendance,
     paginatedData,
     totalPages,
+    updateAtdanceMutation,
+    createAtdanceMutation
   };
 }

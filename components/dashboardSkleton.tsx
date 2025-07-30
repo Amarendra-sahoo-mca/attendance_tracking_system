@@ -14,9 +14,9 @@ function DashboardSkleton() {
                 />
               ))}
           </div>
-          <div className="flex w-282   ">
-          <Skeleton className="w-2/5 h-90 mt-2 rounded-lg" />
-          <div className="w-3/5">
+          <div className="flex w-282">
+          <Skeleton className="w-[36%] h-90 mt-2 rounded-lg" />
+          <div className="w-[64%]">
           <Skeleton className="w-full h-32 mt-2 ml-5 rounded-lg" />
           <Skeleton className="w-full h-58 mt-2 ml-5 rounded-lg" />
           </div>

@@ -9,10 +9,14 @@ import { HolidaysDTO, UpdateHolidaysDTO } from "./Holidays.dto";
 export class HolidaysController extends Controller {
     private Service = new HolidaysService();
 
+    @Get("/dashboard")
+    public async getdashboard(){
+        const service = await createService(HolidaysService);
+        return service.getDashboard();
+    }
+
     @Get("/")
     public async getAll(): Promise<ApiResponse<HolidaysDTO[]>> {
-        console.log("Fetching all Holidays");
-        
         const service = await createService(HolidaysService);
         return service.get();
     }

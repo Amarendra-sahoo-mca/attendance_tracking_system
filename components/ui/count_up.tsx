@@ -28,7 +28,7 @@ export default function CountUp({
 }: CountUpProps) {
   const ref = useRef<HTMLSpanElement>(null);
   const motionValue = useMotionValue(direction === "down" ? to : from);
-
+  
   const damping = 20 + 40 * (1 / duration);
   const stiffness = 100 * (1 / duration);
 
@@ -88,11 +88,11 @@ export default function CountUp({
         const options = {
           useGrouping: !!separator,
           minimumFractionDigits: 0,
-          maximumFractionDigits: 0,
+          maximumFractionDigits: to % 1 === 0 ? 0 : 1,
         };
 
         const formattedNumber = Intl.NumberFormat("en-US", options).format(
-          Number(latest.toFixed(0))
+          Number(latest.toFixed(to % 1 === 0 ? 0 : 1))
         );
 
         ref.current.textContent = separator

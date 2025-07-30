@@ -1,20 +1,17 @@
 import { Field } from "@/components/dialog";
-import {
-  createEmployee,
-  deleteEmployee,
-  editEmployee,
-  getAllEmp,
-} from "@/service/employee.api";
+
+import { createProject, deleteProject, editProject, getAllProject } from "@/service/project.api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
-export function employeeData() {
+export function ProjectData() {
   interface Inputs {
     name: string;
-    email: string;
-    DOJ: Date | undefined;
+    cost: string;
+    start_date: Date | undefined;
+    end_date: Date | undefined;
   }
   const [openForm, setOpenForm] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
@@ -28,16 +25,16 @@ export function employeeData() {
   } = useForm<Inputs>();
 
   const employeeApi = useQuery({
-    queryKey: ["employees"],
-    queryFn: getAllEmp,
+    queryKey: ["project"],
+    queryFn: getAllProject,
   });
   const isLoading = employeeApi.isLoading;
   const data = employeeApi.data;
   const createEmpMutation = useMutation({
-    mutationFn: createEmployee,
+    mutationFn: createProject,
     onSuccess: (data) => {
-      toast(data.message || "Employee created successfully");
-      queryClient.invalidateQueries({ queryKey: ["employees"] }); // refresh list
+      toast(data.message || "Project created successfully");
+      queryClient.invalidateQueries({ queryKey: ["project"] }); // refresh list
     },
     onError: (error: any) => {
       console.log("Mutation error:", error);
@@ -49,56 +46,62 @@ export function employeeData() {
     },
   });
   const editEmpMutation = useMutation({
-    mutationFn: editEmployee,
+    mutationFn: editProject,
     onSuccess: () => {
-      toast("Employee updated successfully");
-      queryClient.invalidateQueries({ queryKey: ["employees"] }); // refresh list
+      toast("Project updated successfully");
+      queryClient.invalidateQueries({ queryKey: ["project"] }); // refresh list
     },
     onError: (error) => {
       toast("Failed to create employee");
     },
   });
   const deleteEmpMutation = useMutation({
-    mutationFn: deleteEmployee,
+    mutationFn: deleteProject,
     onSuccess: () => {
-      toast("Employee delete successfully");
-      queryClient.invalidateQueries({ queryKey: ["employees"] }); // refresh list
+      toast("Project delete successfully");
+      queryClient.invalidateQueries({ queryKey: ["project"] }); // refresh list
     },
     onError: (error) => {
       toast("Failed to delete employee");
     },
   });
 
-  const studentFields: Field[] = [
+  const ProjectFields: Field[] = [
     {
       name: "name",
-      label: "Full Name",
+      label: "Project Name",
       type: "text",
-      placeholder: "Ex. Jhon Deo",
+      placeholder: "Facebook",
       required: true,
     },
     {
-      name: "employee_id",
-      label: "Employee Id",
-      type: "text",
-      placeholder: "ACPL@2021",
+      name: "start_date",
+      label: "Project start date",
+      type: "date",
+      placeholder: "pick your start date",
       required: true,
     },
     {
-      name: "email",
-      label: "Email",
-      type: "email",
-      placeholder: "xxx@gmail.com",
+      name: "end_date",
+      label: "Project end date",
+      type: "date",
+      placeholder: "pick your end date",
+      required: false,
+    },
+    {
+      name: "cost",
+      label: "Project Cost",
+      type: "text",
+      placeholder: "20",
       required: true,
     },
-    { name: "DOJ", label: "Date of Join", type: "date", required: true },
+    
   ];
 
   const myFormSchema = z.object({
-    email: z.string().min(1, "Email is required").email("Invalid email"),
     name: z.string().min(1, "Name is required"),
-    employee_id: z.string().min(1, "Employee Id is required"),
-    DOJ: z.preprocess(
+    cost: z.number().min(1, "Project cost is required"),
+    start_date: z.preprocess(
       (val) => {
         if (typeof val === "string" || val instanceof Date) {
           const date = new Date(val);
@@ -108,14 +111,33 @@ export function employeeData() {
       },
       z
         .date({
-          required_error: "Date of joining is required",
+          required_error: "Project start date is required",
           invalid_type_error: "Invalid date format",
         })
-        .refine((date) => date <= new Date(), {
-          message: "Date of joining must be in the past",
-        })
+        // .refine((date) => date <= new Date(), {
+        //   message: "Date of joining must be in the past",
+        // })
     ),
-  });
+    end_date: z.preprocess(
+      (val) => {
+        if (typeof val === "string" || val instanceof Date) {
+          const date = new Date(val);
+          return isNaN(date.getTime()) ? undefined : date;
+        }
+        return undefined;
+      },
+      z
+        .date({
+          invalid_type_error: "Invalid date format",
+        })
+        // .refine((date) => date <= new Date(), {
+        //   message: "Date of joining must be in the past",
+        // })
+    ),
+  }).refine((data) => !data.end_date || data.end_date > data.start_date, {
+    message: "End date must be after start date",
+    path: ["end_date"],
+  });;
 
   const handleStudentSubmit: SubmitHandler<Inputs> = (data) => {
     createEmpMutation.mutate(data);
@@ -147,7 +169,7 @@ export function employeeData() {
     openForm,
     setOpenForm,
     setOpenEdit,
-    studentFields,
+    ProjectFields,
     openEdit,
     handleStudentEditSubmit,
     handleStudentSubmit,

@@ -7,11 +7,202 @@
 		"requestBodies": {},
 		"responses": {},
 		"schemas": {
+			"ProjectsCreateDTO": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"start_date": {
+						"type": "string"
+					},
+					"end_date": {
+						"type": "string"
+					},
+					"cost": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"name",
+					"start_date",
+					"end_date",
+					"cost"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ApiResponse_ProjectsCreateDTO-Array_": {
+				"properties": {
+					"success": {
+						"type": "boolean"
+					},
+					"message": {
+						"type": "string"
+					},
+					"data": {
+						"items": {
+							"$ref": "#/components/schemas/ProjectsCreateDTO"
+						},
+						"type": "array"
+					},
+					"error": {},
+					"token": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"success",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ApiResponse_any_": {
+				"properties": {
+					"success": {
+						"type": "boolean"
+					},
+					"message": {
+						"type": "string"
+					},
+					"data": {},
+					"error": {},
+					"token": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"success",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ProjectsEntity": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"start_date": {
+						"type": "string"
+					},
+					"end_date": {
+						"type": "string"
+					},
+					"cost": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"id",
+					"name",
+					"start_date",
+					"end_date",
+					"cost"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"HttpStatus": {
+				"enum": [
+					200,
+					201,
+					204,
+					400,
+					401,
+					403,
+					404,
+					409,
+					500
+				],
+				"type": "number"
+			},
+			"IResponse": {
+				"properties": {
+					"success": {
+						"type": "boolean"
+					},
+					"message": {
+						"type": "string"
+					},
+					"data": {},
+					"statusCode": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"success",
+					"message",
+					"data",
+					"statusCode"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"UpdateProjectsDTO": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"start_date": {
+						"type": "string"
+					},
+					"end_date": {
+						"type": "string"
+					},
+					"cost": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"name",
+					"start_date",
+					"end_date",
+					"cost"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ApiResponse_null_": {
+				"properties": {
+					"success": {
+						"type": "boolean"
+					},
+					"message": {
+						"type": "string"
+					},
+					"data": {
+						"type": "number",
+						"enum": [
+							null
+						],
+						"nullable": true
+					},
+					"error": {},
+					"token": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"success",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"LeaveType": {
 				"enum": [
 					"Vacation",
 					"Sickness",
-					"Maternity",
+					"Maternity or Paternity",
 					"Compassionate",
 					"TOIL",
 					"Work From Home",
@@ -67,27 +258,6 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"ApiResponse_any_": {
-				"properties": {
-					"success": {
-						"type": "boolean"
-					},
-					"message": {
-						"type": "string"
-					},
-					"data": {},
-					"error": {},
-					"token": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"success",
-					"message"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
 			"LeaveEntitlementsEntity": {
 				"properties": {
 					"id": {
@@ -114,43 +284,6 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"HttpStatus": {
-				"enum": [
-					200,
-					201,
-					204,
-					400,
-					401,
-					403,
-					404,
-					409,
-					500
-				],
-				"type": "number"
-			},
-			"IResponse": {
-				"properties": {
-					"success": {
-						"type": "boolean"
-					},
-					"message": {
-						"type": "string"
-					},
-					"data": {},
-					"statusCode": {
-						"type": "number",
-						"format": "double"
-					}
-				},
-				"required": [
-					"success",
-					"message",
-					"data",
-					"statusCode"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
 			"UpdateLeaveEntitlementsDTO": {
 				"properties": {
 					"type": {
@@ -169,33 +302,6 @@
 					"type",
 					"theme",
 					"days"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"ApiResponse_null_": {
-				"properties": {
-					"success": {
-						"type": "boolean"
-					},
-					"message": {
-						"type": "string"
-					},
-					"data": {
-						"type": "number",
-						"enum": [
-							null
-						],
-						"nullable": true
-					},
-					"error": {},
-					"token": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"success",
-					"message"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -594,6 +700,180 @@
 		"contact": {}
 	},
 	"paths": {
+		"/projects": {
+			"get": {
+				"operationId": "GetAll",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ApiResponse_ProjectsCreateDTO-Array_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"projects"
+				],
+				"security": [],
+				"parameters": []
+			},
+			"post": {
+				"operationId": "Save",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"statusCode": {
+											"$ref": "#/components/schemas/HttpStatus"
+										},
+										"data": {
+											"$ref": "#/components/schemas/ProjectsEntity"
+										},
+										"message": {
+											"type": "string"
+										},
+										"success": {
+											"type": "boolean"
+										}
+									},
+									"required": [
+										"statusCode",
+										"data",
+										"message",
+										"success"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"projects"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ProjectsCreateDTO"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/projects/{id}": {
+			"get": {
+				"operationId": "GetById",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ApiResponse_any_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"projects"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
+			"put": {
+				"operationId": "Update",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/IResponse"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"projects"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdateProjectsDTO"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "Delete",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ApiResponse_null_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"projects"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
 		"/leave_entitlements": {
 			"get": {
 				"operationId": "GetAll",
@@ -766,6 +1046,51 @@
 						}
 					}
 				]
+			}
+		},
+		"/holidays/dashboard": {
+			"get": {
+				"operationId": "Getdashboard",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/IResponse"
+										},
+										{
+											"properties": {
+												"statusCode": {
+													"$ref": "#/components/schemas/HttpStatus"
+												},
+												"error": {},
+												"message": {},
+												"success": {
+													"type": "boolean"
+												}
+											},
+											"required": [
+												"statusCode",
+												"error",
+												"message",
+												"success"
+											],
+											"type": "object"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Holidays"
+				],
+				"security": [],
+				"parameters": []
 			}
 		},
 		"/holidays": {

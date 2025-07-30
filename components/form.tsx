@@ -74,10 +74,12 @@ export function DynamicForm({
     resolver: schema ? zodResolver(schema) : undefined,
   });
   
-  
   const [showPassword, setShowPassword] = useState(false);
 
   const onSubmitWithReset: SubmitHandler<any> = (data) => {
+    if(defaultValues.id){
+      data.id = defaultValues.id;
+    }
     onSubmit(data);
     reset();
   };

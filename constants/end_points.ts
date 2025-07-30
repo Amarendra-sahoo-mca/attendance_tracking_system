@@ -2,9 +2,12 @@ export const Base_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhos
 export const ENDPOINTS = {
   STUDENT: "/employee",
   HOLIDAYS: "/holidays",
-  ATTENDANCE :"/attendance"
+  ATTENDANCE :"/attendance",
+  PROJECT :"/projects",
+  DASHBOARD : "/holidays/dashboard"
 }
 
 export const PATHS = {
-  EMP_PROFILE : "/app/employee"
+  EMP_PROFILE : "/app/employee",
+  SETTINGS : '/app/settings',
 }

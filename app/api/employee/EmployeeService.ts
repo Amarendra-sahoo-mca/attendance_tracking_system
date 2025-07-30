@@ -12,8 +12,6 @@ import { EmployeeCreateDTO, UpdateEmployeeDTO } from "./Employee.dto";
 import { EmployeeEntity } from "../db/entities/employee";
 import { UserEntity } from "../db/entities/user";
 import { UserType } from "../common.enum";
-import { log } from "util";
-import { error } from "console";
 import { groupCount } from "../utils/functions";
 import { LeaveEntitlementsEntity } from "../db/entities/leave_entitlements";
 import { getDuration } from "../utils/calender";
@@ -34,13 +32,13 @@ export class EmployeeService {
   async get() {
     try {
       const tags = await this.repository.find({
-        relations: ['user','attendance'],
+        relations: ['user',],
         order: { id: "DESC" },
       });
       
-      tags.map((item:any)=>{
-        item.DOJ = new Date(item.DOJ).toLocaleDateString("en-GB");
-      })
+      // tags.map((item:any)=>{
+      //   item.DOJ = new Date(item.DOJ).toLocaleDateString("en-GB");
+      // })
       const response: IResponse = {
         success: true,
         message: MESSAGES.DATA_LIST_SUCCESS,
@@ -82,6 +80,7 @@ export class EmployeeService {
         data: {...tag,experience,leave_info:groupdate,DOJ:new Date(tag.DOJ).toLocaleDateString("en-GB")},
         statusCode: HttpStatus.OK,
       };
+      
       return response;
     } catch (error:any) {
       return {

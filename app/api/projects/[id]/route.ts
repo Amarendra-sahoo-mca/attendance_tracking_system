@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { LeaveEntitlementsController } from "../leave_entitlementsController";
-import { LeaveEntitlementsCreateDTO } from "../leave_entitlements.dto";
+import { ProjectsCreateDTO } from "../projects.dto";
+import { ProjectsController } from "../projectsController";
 
-const controller = new LeaveEntitlementsController();
+const controller = new ProjectsController();
 
 export async function GET(request: NextRequest, context: { params: Promise<{ id: string }> }) {
     const { id } = await context.params;
